@@ -6,7 +6,7 @@ from Model import getNlp
 displayDebuggerInformation = True
 attentionPhrase = "Hey Microphone, " #this should be a database entry
 
-
+# an event should contain an event and the date
 
 def debugger_textPrint(textToDisplay = "", addNewLine = False):
     if(displayDebuggerInformation):
