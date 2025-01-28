@@ -22,3 +22,9 @@ Entire list can be found on their #Github https://github.com/explosion/spaCy/blo
 ### Links I dont want to bookmark
 [Matcher Explorer](https://demos.explosion.ai/matcher)
 [Span](https://spacy.io/api/span#attributes)
+
+
+## Personal Notes
+Something to keep in mind: When saving something to the DB as "Going to the movies",
+grabbing that information back will require a different form of speech "When was the last time I was at the movies".
+To grab that information from the DB will require a different query phrase that may require more work than expected

@@ -1,3 +1,22 @@
+# comparing similaries between tokens and docs
+doc1 = nlp("It's a warm summer day")
+doc2 = nlp("It's sunny outside")
+span1 = doc[3:5]
+span2 = doc[12:15]
+token1, token2 = doc[0], doc[2]
+
+similarity = token1.similarity(token2)
+similarity = span1.similarity(span2)
+similarity = doc1.similarity(doc2)
+print(similarity)
+
+#you can disable custom pipes by surrounding them in a `with` block
+with nlp.select_pipes(disable=["tagger", "parser"]):
+    # Process the text and print the entities
+    doc = nlp(text)
+    print(doc.ents)
+
+
 # creating custom matcher, a custom pipeline, and adding it to the doc
 import spacy
 from spacy.language import Language

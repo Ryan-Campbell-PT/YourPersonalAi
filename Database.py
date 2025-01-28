@@ -1,6 +1,47 @@
 import sqlite3
 from datetime import datetime
 
+def runFetchCommand(sqlStatements = []):
+    conn = getConnection()
+    fetchReturn = []
+
+    for statement in sqlStatements:
+        cursor = conn.execute(statement)
+        fetchReturn.append([command for command in cursor])
+
+    closeConnection(conn)
+    return fetchReturn
+
+def runSetCommand(sqlStatements = []):
+    conn = getConnection()
+
+    for sqlString in sqlStatements:
+        conn.execute(sqlString)
+
+    closeConnection(conn)
+    return
+
+#in the future, can pass a string into this to get different db's
+def getConnection():
+    conn = sqlite3.connect("events.db")
+    
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS Events (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        action TEXT NOT NULL,
+        date TEXT NOT NULL
+        )
+    """)
+
+    conn.commit()
+    return conn
+
+def closeConnection(connection):
+    connection.commit()
+    connection.close()
+    return
+
+
 def getDateFromEnt(ent):
     date = datetime.today().date()
     textLower = ent.text.lower()
@@ -25,33 +66,8 @@ def getDateFromEnt(ent):
 def saveEventToDB(doc, event):
     for ent in doc.ents:
         date = getDateFromEnt(ent)
-        sqlStatement = f"INSERT INTO Events (action, date) VALUES ('{event}', '{str(date)}')"
+        sqlStatement = f"INSERT INTO Events (action, date) VALUES ({event}, '{str(date)}')"
 
-        runDatabaseCommand([sqlStatement])
+        runSetCommand([sqlStatement])
 
-    printEventsTable()
-
-    return True
-
-def printEventsTable():
-    runDatabaseCommand(["SELECT * FROM Events"])
-
-def runDatabaseCommand(sqlStatements = []):
-    conn = sqlite3.connect("events.db")
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Events (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        action TEXT NOT NULL,
-        date TEXT NOT NULL
-        )
-    """)
-
-    for sqlString in sqlStatements:
-        if(sqlString[-1] != ';'):
-            sqlString += ';'
-        cursor.execute(sqlString)
-
-    conn.commit()
-    conn.close()
+    return
